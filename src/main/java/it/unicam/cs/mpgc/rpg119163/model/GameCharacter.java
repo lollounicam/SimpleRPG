@@ -111,5 +111,28 @@ public class GameCharacter {
         return this.currentHealth;
     }
 
+    public double attackTarget(final GameCharacter target){
+        if(!this.isAlive()){
+            return 0;
+        }
 
+        if(!target.isAlive()){
+            return 0;
+        }
+
+        double damage = this.attack - target.getDefense();
+
+        if(damage <= 0){
+            return 0;
+        }
+
+        target.takeDamage(damage);
+        return damage;
+    }
+
+
+
+    protected void increaseLevel(){
+        this.level++;
+    }
 }

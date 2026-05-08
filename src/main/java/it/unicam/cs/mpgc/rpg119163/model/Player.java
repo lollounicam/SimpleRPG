@@ -29,4 +29,8 @@ public class Player extends GameCharacter {
         }
         this.experience += amount;
     }
+
+    private int experienceToNextLevel(){
+        return (int) Math.round(100 * Math.pow(1.5, this.getLevel() - 1));
+    }
 }
