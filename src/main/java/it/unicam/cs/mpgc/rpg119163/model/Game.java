@@ -17,6 +17,9 @@ package it.unicam.cs.mpgc.rpg119163.model;
  *  [ ] Implement Swing GUI
  */
 
+import it.unicam.cs.mpgc.rpg119163.model.characters.Enemy;
+import it.unicam.cs.mpgc.rpg119163.model.characters.Player;
+
 public class Game {
 
     private Player player;

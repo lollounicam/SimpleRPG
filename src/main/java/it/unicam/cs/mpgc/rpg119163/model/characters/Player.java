@@ -1,9 +1,15 @@
-package it.unicam.cs.mpgc.rpg119163.model;
+package it.unicam.cs.mpgc.rpg119163.model.characters;
+
+import it.unicam.cs.mpgc.rpg119163.model.items.Item;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends GameCharacter {
 
     private int experience;
     private int gold;
+    private final List<Item> inventory;
 
     public Player(final String name,
                   final double maxHealth,
@@ -12,6 +18,7 @@ public class Player extends GameCharacter {
         super(name, maxHealth, attack, defense);
         this.experience = 0;
         this.gold = 0;
+        this.inventory = new ArrayList<>();
     }
 
     public int getExperience() {
@@ -71,5 +78,27 @@ public class Player extends GameCharacter {
             this.applyLevelUpBonus();
             this.experience = exp;
         }
+    }
+
+    public void addItem(final Item item) {
+        if (item == null) {
+            return;
+        }
+        this.inventory.add(item);
+    }
+
+    public List<Item> getInventory() {
+        return List.copyOf(this.inventory);
+    }
+
+    public void useItem(final Item item) {
+        if (item == null) {
+            return;
+        }
+        if (!this.inventory.contains(item)) {
+            return;
+        }
+        item.use(this);
+        this.inventory.remove(item);
     }
 }

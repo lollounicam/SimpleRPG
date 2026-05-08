@@ -1,8 +1,9 @@
 package it.unicam.cs.mpgc.rpg119163;
 
-import it.unicam.cs.mpgc.rpg119163.model.Enemy;
+import it.unicam.cs.mpgc.rpg119163.model.characters.Enemy;
 import it.unicam.cs.mpgc.rpg119163.model.Game;
-import it.unicam.cs.mpgc.rpg119163.model.Player;
+import it.unicam.cs.mpgc.rpg119163.model.characters.Player;
+import it.unicam.cs.mpgc.rpg119163.model.items.HealingPotion;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,5 +23,32 @@ public class Main {
         System.out.println(player);
         System.out.println("XP: " + player.getExperience());
         System.out.println("Level: " + player.getLevel());
+
+        player.takeDamage(40);
+        System.out.println(player.getCurrentHealth());
+
+        player.heal(20);
+        System.out.println(player.getCurrentHealth());
+
+        player.heal(999);
+        System.out.println(player.getCurrentHealth());
+
+        player.heal(100);
+        System.out.println(player.getCurrentHealth());
+
+        HealingPotion potion = new HealingPotion("Potion", "Heals 50 HP", 10, 50);
+        player.addItem(potion);
+
+        System.out.println(player.getInventory());
+
+        player.takeDamage(40);
+
+        System.out.println(player.getCurrentHealth());
+
+        player.useItem(potion);
+
+        System.out.println(player.getCurrentHealth());
+
+        System.out.println(player.getInventory());
     }
 }

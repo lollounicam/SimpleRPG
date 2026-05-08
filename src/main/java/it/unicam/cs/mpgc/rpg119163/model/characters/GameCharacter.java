@@ -1,4 +1,4 @@
-package it.unicam.cs.mpgc.rpg119163.model;
+package it.unicam.cs.mpgc.rpg119163.model.characters;
 
 public class GameCharacter {
 
@@ -147,6 +147,20 @@ public class GameCharacter {
     }
     protected void restoreFullHealth(){
         this.currentHealth = this.maxHealth;
+    }
+
+    public double heal(final double amount){
+        if (!this.isAlive) {
+            return this.currentHealth;
+        }
+        if (amount <= 0){
+            return this.currentHealth;
+        }
+        this.currentHealth += amount;
+        if (this.currentHealth > this.maxHealth){
+            this.currentHealth = this.maxHealth;
+        }
+        return this.currentHealth;
     }
 
 
