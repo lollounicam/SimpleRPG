@@ -36,5 +36,4 @@ public abstract class Item {
                 '}';
     }
 
-    public abstract void use(GameCharacter target);
 }

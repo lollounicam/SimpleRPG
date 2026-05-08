@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.rpg119163.model.characters;
 
 import it.unicam.cs.mpgc.rpg119163.model.items.Item;
+import it.unicam.cs.mpgc.rpg119163.model.items.Usable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,10 @@ public class Player extends GameCharacter {
         if (!this.inventory.contains(item)) {
             return;
         }
-        item.use(this);
+        if (!(item instanceof Usable usableItem)){
+            return;
+        }
+        usableItem.use(this);
         this.inventory.remove(item);
     }
 }

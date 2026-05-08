@@ -42,13 +42,14 @@ public class Main {
         System.out.println(player.getInventory());
 
         player.takeDamage(40);
-
         System.out.println(player.getCurrentHealth());
 
+        player.addItem(potion);
         player.useItem(potion);
 
         System.out.println(player.getCurrentHealth());
-
+        System.out.println(player.getInventory());
+        player.useItem(potion);
         System.out.println(player.getInventory());
     }
 }
