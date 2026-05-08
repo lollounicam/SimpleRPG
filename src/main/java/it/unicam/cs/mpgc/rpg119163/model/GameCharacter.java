@@ -90,39 +90,39 @@ public class GameCharacter {
 
     public double takeDamage(final double damage) {
         if (!this.isAlive) {
-            System.out.println("Hero is already dead, no damage taken");
+            //System.out.println("Hero is already dead, no damage taken");
             return this.currentHealth;
         }
 
         if (damage <= 0) {
-            System.out.println("You can't take negative or zero damage!");
+            //System.out.println("You can't take negative or zero damage!");
             return this.currentHealth;
         }
 
         if (this.currentHealth - damage <= 0) {
             this.currentHealth = 0;
             this.isAlive = false;
-            System.out.println("Dead hero with this damage");
+            //System.out.println("Dead hero with this damage");
             return this.currentHealth;
         }
 
         this.currentHealth -= damage;
-        System.out.println("Danno minore della vita, vita rimanente= " + this.currentHealth);
+        //System.out.println("Danno minore della vita, vita rimanente= " + this.currentHealth);
         return this.currentHealth;
     }
 
-    public double attackTarget(final GameCharacter target){
-        if(!this.isAlive()){
+    public double attackTarget (final GameCharacter target){
+        if (!this.isAlive()){
             return 0;
         }
 
-        if(!target.isAlive()){
+        if (!target.isAlive()){
             return 0;
         }
 
-        double damage = this.attack - target.getDefense();
+        final double damage = this.attack - target.getDefense();
 
-        if(damage <= 0){
+        if (damage <= 0){
             return 0;
         }
 
@@ -132,7 +132,22 @@ public class GameCharacter {
 
 
 
-    protected void increaseLevel(){
+    protected void increaseLevel() {
         this.level++;
     }
+
+    protected void increaseMaxHealth(final double amount) {
+        this.maxHealth += amount;
+    }
+    protected void increaseAttack(final double amount) {
+        this.attack += amount;
+    }
+    protected void increaseDefense(final double amount) {
+        this.defense += amount;
+    }
+    protected void restoreFullHealth(){
+        this.currentHealth = this.maxHealth;
+    }
+
+
 }

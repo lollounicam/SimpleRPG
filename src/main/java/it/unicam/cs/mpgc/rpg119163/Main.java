@@ -1,23 +1,26 @@
 package it.unicam.cs.mpgc.rpg119163;
 
 import it.unicam.cs.mpgc.rpg119163.model.Enemy;
-import it.unicam.cs.mpgc.rpg119163.model.GameCharacter;
+import it.unicam.cs.mpgc.rpg119163.model.Game;
 import it.unicam.cs.mpgc.rpg119163.model.Player;
 
 public class Main {
     public static void main(String[] args) {
-        Player hero = new Player("Player", 100, 10, 10);
-        Enemy enemy = new Enemy("Enemy", 100, 5, 2, 10, 10);
+        Player player = new Player("Hero", 100, 20, 5);
+        Enemy goblin = new Enemy("Goblin", 10, 10, 3, 25, 8);
+        Enemy boss = new Enemy("Boss", 10, 10, 3, 150, 20);
 
-        System.out.println(enemy);
-        double damage = hero.attackTarget(enemy);
-        System.out.println("Danno inflitto: " + damage);
-        System.out.println(enemy);
+          Game game = new Game(player, boss);
+//        game.nextTurn();
+//        System.out.println("XP: " + player.getExperience());
+//        System.out.println("Gold: " + player.getGold());
 
-        Enemy tank = new Enemy("Tank", 100, 5, 50, 20, 10);
+        System.out.println("--------------------------");
 
-        double damageToTank = hero.attackTarget(tank);
-        System.out.println("Damage dealt to tank: " + damageToTank);
-        System.out.println(tank);
+        game.nextTurn();
+
+        System.out.println(player);
+        System.out.println("XP: " + player.getExperience());
+        System.out.println("Level: " + player.getLevel());
     }
 }
