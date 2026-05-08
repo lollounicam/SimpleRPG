@@ -1,22 +1,19 @@
 package it.unicam.cs.mpgc.rpg119163;
 
 import it.unicam.cs.mpgc.rpg119163.model.GameCharacter;
+import it.unicam.cs.mpgc.rpg119163.model.Player;
 
 public class Main {
     public static void main(String[] args) {
-        GameCharacter superman = new GameCharacter("Superman", 1000,100, 100);
-        System.out.println(superman);
+        Player player = new Player("Player", 100, 10, 10);
 
-        superman.takeDamage(20);
-        System.out.println(superman);
+        System.out.println("Current health: " + player.getCurrentHealth() + "");
+        player.takeDamage(10);
+        System.out.println("Current health: " + player.getCurrentHealth() + "");
 
-        superman.takeDamage(500);
-        System.out.println(superman);
+        System.out.println("Experience: " + player.getExperience() + "");
+        player.gainExperience(10);
+        System.out.println("Experience: " + player.getExperience() + "");;
 
-        superman.takeDamage(-50);
-        System.out.println(superman);
-
-        superman.takeDamage(10);
-        System.out.println(superman);
     }
 }
