@@ -102,20 +102,28 @@ public class MainWindow extends JFrame {
 
         this.saveButton.addActionListener(
                 e -> {
-                    this.gameRepository.saveGame(this.game, "savegame.json");
-                    this.messageLabel.setText("Game saved successfully.");
+                    try {
+                        this.gameRepository.saveGame(this.game, "savegame.json");
+                        this.messageLabel.setText("Game saved successfully.");
+                    } catch (IllegalStateException exception) {
+                        this.messageLabel.setText("Unable to save the game.");
+                    }
                 }
         );
 
         this.loadButton.addActionListener(
                 e -> {
-                    this.game = this.gameRepository.loadGame("savegame.json");
-                    this.updateLabels();
-                    this.messageLabel.setText("Game loaded successfully.");
-                    this.attackButton.setEnabled(
-                            this.game.getPlayer().isAlive()
-                            && this.game.getCurrentEnemy().isAlive()
-                    );
+                    try {
+                        this.game = this.gameRepository.loadGame("savegame.json");
+                        this.updateLabels();
+                        this.messageLabel.setText("Game loaded successfully.");
+                        this.attackButton.setEnabled(
+                                this.game.getPlayer().isAlive()
+                                        && this.game.getCurrentEnemy().isAlive()
+                        );
+                    }catch (IllegalStateException exception) {
+                        this.messageLabel.setText("Unable to load the game.");
+                    }
                 }
         );
 
