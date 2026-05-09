@@ -153,9 +153,17 @@ public class MainWindow extends JFrame {
 
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
-        add(inventoryScrollPane, BorderLayout.EAST);
         add(bottomPanel, BorderLayout.SOUTH);
 
+        JPanel inventoryPanel = new JPanel();
+        inventoryPanel.setLayout(new BorderLayout());
+
+        JLabel inventoryLabel = new JLabel("Inventory");
+
+        inventoryPanel.add(inventoryLabel, BorderLayout.NORTH);
+        inventoryPanel.add(inventoryScrollPane, BorderLayout.CENTER);
+
+        add(inventoryPanel, BorderLayout.EAST);
 
     }
 
