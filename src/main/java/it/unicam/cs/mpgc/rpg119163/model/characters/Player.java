@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.rpg119163.model.characters;
 
 import it.unicam.cs.mpgc.rpg119163.model.items.Item;
 import it.unicam.cs.mpgc.rpg119163.model.items.Usable;
+import it.unicam.cs.mpgc.rpg119163.model.items.Weapon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class Player extends GameCharacter {
     }
 
     public void gainExperience(final int amount) {
-        if(amount <= 0) {
+        if (amount <= 0) {
             //System.out.println("You can't gain negative or zero experience!");
             return;
         }
@@ -40,7 +41,7 @@ public class Player extends GameCharacter {
     }
 
     public void gainGold(final int amount) {
-        if(amount <= 0) {
+        if (amount <= 0) {
             //System.out.println("You can't gain negative or zero gold!");
             return;
         }
@@ -99,10 +100,23 @@ public class Player extends GameCharacter {
         if (!this.inventory.contains(item)) {
             return;
         }
-        if (!(item instanceof Usable usableItem)){
+        if (!(item instanceof Usable usableItem)) {
             return;
         }
         usableItem.use(this);
         this.inventory.remove(item);
+    }
+
+    public void equipWeapon(final Weapon weapon) {
+        if (weapon == null) {
+            return;
+        }
+
+        if (!this.inventory.contains(weapon)) {
+            return;
+        }
+
+        this.increaseAttack(weapon.getAttackBonus());
+        this.inventory.remove(weapon);
     }
 }
