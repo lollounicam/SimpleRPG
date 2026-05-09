@@ -25,107 +25,30 @@ public class MainWindow extends JFrame {
 
     public MainWindow(final Game game) {
 
-        this.playerHealthLabel = new JLabel();
-        this.enemyHealthLabel = new JLabel();
-        this.messageLabel = new JLabel("Welcome to SimpleRPG!");
-        this.playerHealthBar = new JProgressBar();
-        this.enemyHealthBar = new JProgressBar();
         this.game = game;
         this.gameRepository = new GameRepository();
 
+        this.configureWindow();
+
+        this.playerHealthLabel = new JLabel();
+        this.enemyHealthLabel = new JLabel();
+        this.messageLabel = new JLabel("Welcome to SimpleRPG!");
+
+        this.playerHealthBar = new JProgressBar();
+        this.enemyHealthBar = new JProgressBar();
+
         this.playerHealthBar.setMinimum(0);
         this.enemyHealthBar.setMinimum(0);
-
         this.playerHealthBar.setStringPainted(true);
         this.enemyHealthBar.setStringPainted(true);
-
-        setTitle("SimpleRPG");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
 
         this.attackButton = new JButton("Attack");
         this.saveButton = new JButton("Save");
         this.loadButton = new JButton("Load");
 
-        JPanel topPanel = new JPanel();
-        JPanel centerPanel = new JPanel();
-        JPanel bottomPanel = new JPanel();
-
-        centerPanel.setLayout(new GridLayout(2, 2));
-        bottomPanel.setLayout(new FlowLayout());
-
-        topPanel.add(this.messageLabel);
-
-        centerPanel.add(this.playerHealthLabel);
-        centerPanel.add(this.playerHealthBar);
-        centerPanel.add(this.enemyHealthLabel);
-        centerPanel.add(this.enemyHealthBar);
-
-        bottomPanel.add(this.attackButton);
-        bottomPanel.add(this.saveButton);
-        bottomPanel.add(this.loadButton);
-
-        add(topPanel, BorderLayout.NORTH);
-        add(centerPanel, BorderLayout.CENTER);
-        add(bottomPanel, BorderLayout.SOUTH);
-
+        this.buildLayout();
         this.updateLabels();
-
-        this.attackButton.addActionListener(
-                e -> {
-                    this.game.nextTurn();
-                    this.updateLabels();
-
-                    if (!this.game.getCurrentEnemy().isAlive()) {
-                        this.messageLabel.setText(
-                                this.game.getCurrentEnemy().getName()
-                                        + " defeated!"
-                        );
-                        this.attackButton.setEnabled(false);
-                    }
-
-                    else if (!this.game.getPlayer().isAlive()) {
-                        this.messageLabel.setText(
-                            this.game.getPlayer().getName()
-                                        + " defeated!"
-                    );
-                        this.attackButton.setEnabled(false);
-                    }
-
-                    else {
-                        this.messageLabel.setText("Turn completed.");
-                    }
-                }
-        );
-
-        this.saveButton.addActionListener(
-                e -> {
-                    try {
-                        this.gameRepository.saveGame(this.game, "savegame.json");
-                        this.messageLabel.setText("Game saved successfully.");
-                    } catch (IllegalStateException exception) {
-                        this.messageLabel.setText("Unable to save the game.");
-                    }
-                }
-        );
-
-        this.loadButton.addActionListener(
-                e -> {
-                    try {
-                        this.game = this.gameRepository.loadGame("savegame.json");
-                        this.updateLabels();
-                        this.messageLabel.setText("Game loaded successfully.");
-                        this.attackButton.setEnabled(
-                                this.game.getPlayer().isAlive()
-                                        && this.game.getCurrentEnemy().isAlive()
-                        );
-                    }catch (IllegalStateException exception) {
-                        this.messageLabel.setText("Unable to load the game.");
-                    }
-                }
-        );
+        this.configureActions();
 
         setVisible(true);
     }
@@ -171,4 +94,92 @@ public class MainWindow extends JFrame {
                 + (int) this.game.getCurrentEnemy().getMaxHealth()
         );
     }
-}
+
+    private void configureWindow() {
+        setTitle("SimpleRPG");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+    }
+
+    private void buildLayout() {
+        JPanel topPanel = new JPanel();
+        JPanel centerPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
+
+        centerPanel.setLayout(new GridLayout(2, 2));
+        bottomPanel.setLayout(new FlowLayout());
+
+        topPanel.add(this.messageLabel);
+
+        centerPanel.add(this.playerHealthLabel);
+        centerPanel.add(this.playerHealthBar);
+        centerPanel.add(this.enemyHealthLabel);
+        centerPanel.add(this.enemyHealthBar);
+
+        bottomPanel.add(this.attackButton);
+        bottomPanel.add(this.saveButton);
+        bottomPanel.add(this.loadButton);
+
+        add(topPanel, BorderLayout.NORTH);
+        add(centerPanel, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    private void configureActions() {
+            this.attackButton.addActionListener(
+                    e -> {
+                        this.game.nextTurn();
+                        this.updateLabels();
+
+                        if (!this.game.getCurrentEnemy().isAlive()) {
+                            this.messageLabel.setText(
+                                    this.game.getCurrentEnemy().getName()
+                                            + " defeated!"
+                            );
+                            this.attackButton.setEnabled(false);
+                        }
+
+                        else if (!this.game.getPlayer().isAlive()) {
+                            this.messageLabel.setText(
+                                    this.game.getPlayer().getName()
+                                            + " defeated!"
+                            );
+                            this.attackButton.setEnabled(false);
+                        }
+
+                        else {
+                            this.messageLabel.setText("Turn completed.");
+                        }
+                    }
+            );
+
+            this.saveButton.addActionListener(
+                    e -> {
+                        try {
+                            this.gameRepository.saveGame(this.game, "savegame.json");
+                            this.messageLabel.setText("Game saved successfully.");
+                        } catch (IllegalStateException exception) {
+                            this.messageLabel.setText("Unable to save the game.");
+                        }
+                    }
+            );
+
+            this.loadButton.addActionListener(
+                    e -> {
+                        try {
+                            this.game = this.gameRepository.loadGame("savegame.json");
+                            this.updateLabels();
+                            this.messageLabel.setText("Game loaded successfully.");
+                            this.attackButton.setEnabled(
+                                    this.game.getPlayer().isAlive()
+                                            && this.game.getCurrentEnemy().isAlive()
+                            );
+                        } catch (IllegalStateException exception) {
+                            this.messageLabel.setText("Unable to load the game.");
+                        }
+                    }
+            );
+        }
+    }
