@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.rpg119163.view;
 
 import it.unicam.cs.mpgc.rpg119163.model.Game;
+import it.unicam.cs.mpgc.rpg119163.persistence.GameRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.awt.*;
 public class MainWindow extends JFrame {
 
     private final Game game;
+    private final GameRepository gameRepository;
 
     private final JLabel playerHealthLabel;
     private final JLabel enemyHealthLabel;
@@ -16,6 +18,8 @@ public class MainWindow extends JFrame {
     private final JProgressBar enemyHealthBar;
 
     private final JButton attackButton;
+    private final JButton saveButton;
+    private final JButton loadButton;
 
     private final JLabel messageLabel;
 
@@ -27,6 +31,7 @@ public class MainWindow extends JFrame {
         this.playerHealthBar = new JProgressBar();
         this.enemyHealthBar = new JProgressBar();
         this.game = game;
+        this.gameRepository = new GameRepository();
 
         this.playerHealthBar.setMinimum(0);
         this.enemyHealthBar.setMinimum(0);
@@ -41,6 +46,8 @@ public class MainWindow extends JFrame {
         setLayout(new FlowLayout());
 
         this.attackButton = new JButton("Attack");
+        this.saveButton = new JButton("Save");
+        this.loadButton = new JButton("Load");
 
         add(this.playerHealthLabel);
         add(this.enemyHealthLabel);
@@ -49,8 +56,9 @@ public class MainWindow extends JFrame {
         add(this.enemyHealthBar);
 
         add(this.attackButton);
+        add(this.saveButton);
+        add(this.loadButton);
         add(this.messageLabel);
-
 
         this.updateLabels();
 
@@ -81,7 +89,18 @@ public class MainWindow extends JFrame {
                 }
         );
 
+        this.saveButton.addActionListener(
+                e -> {
+                    this.gameRepository.saveGame(this.game, "savegame.json");
+                    this.messageLabel.setText("Game saved successfully.");
+                }
+        );
 
+        this.loadButton.addActionListener(
+                e -> {
+                    this.messageLabel.setText("Load is available from persistence, but GUI state replacement will be completed in the next iteration.");
+                }
+        );
 
         setVisible(true);
     }
