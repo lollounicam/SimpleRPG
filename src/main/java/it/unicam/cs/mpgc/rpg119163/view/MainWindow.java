@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private final Game game;
+    private Game game;
     private final GameRepository gameRepository;
 
     private final JLabel playerHealthLabel;
@@ -43,22 +43,33 @@ public class MainWindow extends JFrame {
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new FlowLayout());
+        setLayout(new BorderLayout());
 
         this.attackButton = new JButton("Attack");
         this.saveButton = new JButton("Save");
         this.loadButton = new JButton("Load");
 
-        add(this.playerHealthLabel);
-        add(this.enemyHealthLabel);
+        JPanel topPanel = new JPanel();
+        JPanel centerPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
 
-        add(this.playerHealthBar);
-        add(this.enemyHealthBar);
+        centerPanel.setLayout(new GridLayout(2, 2));
+        bottomPanel.setLayout(new FlowLayout());
 
-        add(this.attackButton);
-        add(this.saveButton);
-        add(this.loadButton);
-        add(this.messageLabel);
+        topPanel.add(this.messageLabel);
+
+        centerPanel.add(this.playerHealthLabel);
+        centerPanel.add(this.playerHealthBar);
+        centerPanel.add(this.enemyHealthLabel);
+        centerPanel.add(this.enemyHealthBar);
+
+        bottomPanel.add(this.attackButton);
+        bottomPanel.add(this.saveButton);
+        bottomPanel.add(this.loadButton);
+
+        add(topPanel, BorderLayout.NORTH);
+        add(centerPanel, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
 
         this.updateLabels();
 
@@ -98,7 +109,13 @@ public class MainWindow extends JFrame {
 
         this.loadButton.addActionListener(
                 e -> {
-                    this.messageLabel.setText("Load is available from persistence, but GUI state replacement will be completed in the next iteration.");
+                    this.game = this.gameRepository.loadGame("savegame.json");
+                    this.updateLabels();
+                    this.messageLabel.setText("Game loaded successfully.");
+                    this.attackButton.setEnabled(
+                            this.game.getPlayer().isAlive()
+                            && this.game.getCurrentEnemy().isAlive()
+                    );
                 }
         );
 
