@@ -8,13 +8,13 @@ package it.unicam.cs.mpgc.rpg119163.model;
  *  [x] Implement damage system
  *  [x] Implement basic combat mechanics
  *  [x] Implement enemy attack
- *  [ ] Implement level up system
- *  [ ] Implement healing system
+ *  [x] Implement level up system
+ *  [x] Implement healing system
  *  [x] Implement combat turns
- *  [ ] Implement inventory
- *  [ ] Implement game loop
- *  [ ] Implement save/load system
- *  [ ] Implement Swing GUI
+ *  [x] Implement inventory
+ *  [x] Implement game loop
+ *  [x] Implement save/load system
+ *  [x] Implement Swing GUI
  */
 
 import it.unicam.cs.mpgc.rpg119163.model.characters.Enemy;
@@ -22,8 +22,8 @@ import it.unicam.cs.mpgc.rpg119163.model.characters.Player;
 
 public class Game {
 
-    private Player player;
-    private Enemy currentEnemy;
+    final private Player player;
+    final private Enemy currentEnemy;
 
     public Game(final Player player, final Enemy enemy) {
         this.player = player;
@@ -47,20 +47,20 @@ public class Game {
     }
 
     public void nextTurn() {
-        final double playerDamage = this.playerAttack();
+        this.playerAttack();
         //System.out.println("Player dealt " + playerDamage + " damage.");
         if (!this.currentEnemy.isAlive()) {
             this.player.gainExperience(this.currentEnemy.getRewardExperience());
             this.player.gainGold(this.currentEnemy.getRewardGold());
-            System.out.println("You won the game!");
+            //System.out.println("You won the game!");
             return;
         }
 
-        final double enemyDamage = this.enemyAttack();
+        this.enemyAttack();
         //System.out.println("Enemy dealt " + enemyDamage + " damage.");
 
         if (!this.player.isAlive()) {
-            System.out.println("You lost the game!");
+            //System.out.println("You lost the game!");
             return;
         }
     }
