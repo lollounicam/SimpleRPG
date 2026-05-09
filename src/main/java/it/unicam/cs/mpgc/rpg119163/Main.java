@@ -23,6 +23,13 @@ public class Main {
                 8
         );
 
+        player.addItem(new Weapon(
+                "Iron Sword",
+                "iron sword",
+                10,
+                10
+        ));
+
         Game game = new Game(player, goblin);
 
         new MainWindow(game);

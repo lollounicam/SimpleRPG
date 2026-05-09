@@ -1,6 +1,9 @@
 package it.unicam.cs.mpgc.rpg119163.view;
 
 import it.unicam.cs.mpgc.rpg119163.model.Game;
+import it.unicam.cs.mpgc.rpg119163.model.items.Equippable;
+import it.unicam.cs.mpgc.rpg119163.model.items.Item;
+import it.unicam.cs.mpgc.rpg119163.model.items.Usable;
 import it.unicam.cs.mpgc.rpg119163.persistence.GameRepository;
 
 import javax.swing.*;
@@ -23,10 +26,20 @@ public class MainWindow extends JFrame {
 
     private final JLabel messageLabel;
 
+    private final JList<String> inventoryList;
+
+    private final JButton useItemButton;
+    private final JButton equipItemButton;
+
     public MainWindow(final Game game) {
 
         this.game = game;
         this.gameRepository = new GameRepository();
+
+        this.inventoryList = new JList<>();
+
+        this.useItemButton = new JButton("Use Item");
+        this.equipItemButton = new JButton("Equip Item");
 
         this.configureWindow();
 
@@ -45,6 +58,7 @@ public class MainWindow extends JFrame {
         this.attackButton = new JButton("Attack");
         this.saveButton = new JButton("Save");
         this.loadButton = new JButton("Load");
+
 
         this.buildLayout();
         this.updateLabels();
@@ -84,15 +98,23 @@ public class MainWindow extends JFrame {
 
         this.playerHealthBar.setString(
                 (int) this.game.getPlayer().getCurrentHealth()
-                + "/"
+                + " / "
                 + (int) this.game.getPlayer().getMaxHealth()
         );
 
         this.enemyHealthBar.setString(
                 (int) this.game.getCurrentEnemy().getCurrentHealth()
-                + "/"
+                + " / "
                 + (int) this.game.getCurrentEnemy().getMaxHealth()
         );
+
+        DefaultListModel<String> inventoryModel =
+                new DefaultListModel<>();
+        for (Item item : this.game.getPlayer().getInventory()) {
+            inventoryModel.addElement(item.getName());
+        }
+
+        this.inventoryList.setModel(inventoryModel);
     }
 
     private void configureWindow() {
@@ -107,6 +129,11 @@ public class MainWindow extends JFrame {
         JPanel topPanel = new JPanel();
         JPanel centerPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
+        JScrollPane inventoryScrollPane =
+                new JScrollPane(this.inventoryList);
+        inventoryScrollPane.setPreferredSize((
+                    new Dimension(150, 0)
+                ));
 
         centerPanel.setLayout(new GridLayout(2, 2));
         bottomPanel.setLayout(new FlowLayout());
@@ -121,14 +148,20 @@ public class MainWindow extends JFrame {
         bottomPanel.add(this.attackButton);
         bottomPanel.add(this.saveButton);
         bottomPanel.add(this.loadButton);
+        bottomPanel.add(this.useItemButton);
+        bottomPanel.add(this.equipItemButton);
 
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
+        add(inventoryScrollPane, BorderLayout.EAST);
         add(bottomPanel, BorderLayout.SOUTH);
+
+
     }
 
     private void configureActions() {
-            this.attackButton.addActionListener(
+
+        this.attackButton.addActionListener(
                     e -> {
                         this.game.nextTurn();
                         this.updateLabels();
@@ -181,5 +214,64 @@ public class MainWindow extends JFrame {
                         }
                     }
             );
+
+            this.useItemButton.addActionListener(
+                    e -> {
+                        final int selectedIndex =
+                                this.inventoryList.getSelectedIndex();
+                        if (selectedIndex == -1) {
+                            this.messageLabel.setText("No item selected.");
+                            return;
+                        }
+                        Item selectedItem =
+                                this.game.getPlayer()
+                                        .getInventory()
+                                        .get(selectedIndex);
+                        if (!(selectedItem instanceof Usable)) {
+                            this.messageLabel.setText("Selected item cannot be used.");
+                            return;
+                        }
+
+                        this.game.getPlayer().useItem(selectedItem);
+
+                        this.updateLabels();
+                        this.messageLabel.setText(
+                                selectedItem.getName()
+                                + " used."
+                        );
+                    }
+
+            );
+
+        this.equipItemButton.addActionListener(
+                e -> {
+                    final int selectedIndex =
+                            this.inventoryList.getSelectedIndex();
+
+                    if (selectedIndex == -1) {
+                        this.messageLabel.setText("No item selected.");
+                        return;
+                    }
+
+                    Item selectedItem =
+                            this.game.getPlayer()
+                                    .getInventory()
+                                    .get(selectedIndex);
+
+                    if (!(selectedItem instanceof Equippable equippableItem)) {
+                        this.messageLabel.setText("Selected item cannot be equipped.");
+                        return;
+                    }
+
+                    equippableItem.equip(this.game.getPlayer());
+
+                    this.updateLabels();
+
+                    this.messageLabel.setText(
+                            selectedItem.getName()
+                                    + " equipped."
+                    );
+                }
+                );
         }
     }
