@@ -11,7 +11,7 @@ public class Player extends GameCharacter {
 
     private int experience;
     private int gold;
-    private final List<Item> inventory;
+    private transient final List<Item> inventory;
 
     public Player(final String name,
                   final double maxHealth,
@@ -90,6 +90,9 @@ public class Player extends GameCharacter {
     }
 
     public List<Item> getInventory() {
+        if (this.inventory == null) {
+            return List.of();
+        }
         return List.copyOf(this.inventory);
     }
 
