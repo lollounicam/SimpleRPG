@@ -19,10 +19,7 @@ public class StartWindow extends JFrame {
     private final JLabel titleLabel;
 
     public StartWindow() {
-        setTitle("SimpleRPG");
-        setSize(400, 250);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        this.configureWindow();
         this.titleLabel = new JLabel("SimpleRPG!");
 
         this.titleLabel.setFont(
@@ -86,5 +83,12 @@ public class StartWindow extends JFrame {
         setVisible(true);
 
 
+    }
+
+    private void configureWindow() {
+        setTitle("SimpleRPG");
+        setSize(400, 250);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
     }
 }
