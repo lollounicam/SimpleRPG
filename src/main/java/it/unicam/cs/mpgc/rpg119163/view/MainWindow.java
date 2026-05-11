@@ -25,6 +25,7 @@ public class MainWindow extends JFrame {
     private final JButton loadButton;
 
     private final JLabel messageLabel;
+    private final JLabel playerStatsLabel;
 
     private final JList<String> inventoryList;
 
@@ -46,6 +47,7 @@ public class MainWindow extends JFrame {
         this.playerHealthLabel = new JLabel();
         this.enemyHealthLabel = new JLabel();
         this.messageLabel = new JLabel("Welcome to SimpleRPG!");
+        this.playerStatsLabel = new JLabel();
 
         this.playerHealthBar = new JProgressBar();
         this.enemyHealthBar = new JProgressBar();
@@ -108,6 +110,18 @@ public class MainWindow extends JFrame {
                 + (int) this.game.getCurrentEnemy().getMaxHealth()
         );
 
+        this.playerStatsLabel.setText(
+                "Level: " + this.game.getPlayer().getLevel()
+
+                        + " | XP: " + this.game.getPlayer().getExperience()
+
+                        + " | Gold: " + this.game.getPlayer().getGold()
+
+                        + " | ATK: " + this.game.getPlayer().getAttack()
+
+                        + " | DEF: " + this.game.getPlayer().getDefense()
+        );
+
         DefaultListModel<String> inventoryModel =
                 new DefaultListModel<>();
         for (Item item : this.game.getPlayer().getInventory()) {
@@ -135,7 +149,7 @@ public class MainWindow extends JFrame {
                     new Dimension(150, 0)
                 ));
 
-        centerPanel.setLayout(new GridLayout(2, 2));
+        centerPanel.setLayout(new GridLayout(3, 2));
         bottomPanel.setLayout(new FlowLayout());
 
         topPanel.add(this.messageLabel);
@@ -144,6 +158,7 @@ public class MainWindow extends JFrame {
         centerPanel.add(this.playerHealthBar);
         centerPanel.add(this.enemyHealthLabel);
         centerPanel.add(this.enemyHealthBar);
+        centerPanel.add(this.playerStatsLabel);
 
         bottomPanel.add(this.attackButton);
         bottomPanel.add(this.saveButton);
