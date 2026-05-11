@@ -16,15 +16,16 @@ public class StartWindow extends JFrame {
     private final JButton newGameButton;
     private final JButton loadGameButton;
     private final JButton exitButton;
+    private final JLabel titleLabel;
 
     public StartWindow() {
         setTitle("SimpleRPG");
         setSize(400, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        JLabel titleLabel = new JLabel("SimpleRPG");
+        this.titleLabel = new JLabel("SimpleRPG!");
 
-        titleLabel.setFont(
+        this.titleLabel.setFont(
                 new Font("Arial", Font.BOLD, 32)
         );
 
@@ -33,8 +34,8 @@ public class StartWindow extends JFrame {
         this.loadGameButton = new JButton("Load Game");
         this.exitButton = new JButton("Exit");
 
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        add(titleLabel, BorderLayout.NORTH);
+        this.titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        add(this.titleLabel, BorderLayout.NORTH);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout((
@@ -81,10 +82,6 @@ public class StartWindow extends JFrame {
         });
 
         this.exitButton.addActionListener(e -> System.exit(0));
-
-
-
-
 
         setVisible(true);
 
