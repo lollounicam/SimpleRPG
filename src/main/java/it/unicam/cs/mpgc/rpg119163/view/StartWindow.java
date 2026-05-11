@@ -24,19 +24,33 @@ public class StartWindow extends JFrame {
         setLocationRelativeTo(null);
         JLabel titleLabel = new JLabel("SimpleRPG");
 
+        titleLabel.setFont(
+                new Font("Arial", Font.BOLD, 32)
+        );
+
         this.gameRepository = new GameRepository();
         this.newGameButton = new JButton("New Game");
         this.loadGameButton = new JButton("Load Game");
         this.exitButton = new JButton("Exit");
 
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        add(titleLabel, BorderLayout.CENTER);
+        add(titleLabel, BorderLayout.NORTH);
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout((
+                new GridLayout(3, 1, 10, 10)
+        ));
         buttonPanel.add(newGameButton);
         buttonPanel.add(loadGameButton);
         buttonPanel.add(exitButton);
-        add(buttonPanel, BorderLayout.SOUTH);
+
+        JPanel centerPanel = new JPanel(
+                new FlowLayout(FlowLayout.CENTER)
+        );
+
+        centerPanel.add(buttonPanel);
+
+        add(centerPanel, BorderLayout.CENTER);
 
         this.newGameButton.addActionListener(e -> {
             Player player = new Player("Hero", 100, 20, 5);
