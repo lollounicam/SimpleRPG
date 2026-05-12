@@ -29,11 +29,12 @@ public abstract class Item {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "name='" + this.name + '\'' +
-                ", description=" + this.description +
-                ", price=" + this.price +
-                '}';
+        return this.name
+                + " - "
+                + this.description
+                + " ("
+                + this.price
+                + " gold)";
     }
 
 }

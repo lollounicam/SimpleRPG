@@ -16,11 +16,17 @@ public class Weapon extends Item implements Equippable {
     }
 
     @Override
-    public void equip(final Player player) {
-        if (player == null){
-            return;
-        }
+    public String toString() {
+        return this.getName()
+                + " - ATK +"
+                + this.getAttackBonus()
+                + " ("
+                + this.getPrice()
+                + " gold)";
+    }
 
+    @Override
+    public void equip(Player player) {
         player.equipWeapon(this);
     }
 }

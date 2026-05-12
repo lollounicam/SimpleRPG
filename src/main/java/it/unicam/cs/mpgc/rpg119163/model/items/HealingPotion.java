@@ -18,4 +18,14 @@ public class HealingPotion extends Item implements Usable {
     public void use(final GameCharacter target) {
         target.heal(this.healingAmount);
     }
+
+    @Override
+    public String toString() {
+        return this.getName()
+                + " - Heals "
+                + this.getHealingAmount()
+                + " HP ("
+                + this.getPrice()
+                + " gold)";
+    }
 }

@@ -261,7 +261,7 @@ public class MainWindow extends JFrame {
         final DefaultListModel<String> inventoryModel = new DefaultListModel<>();
 
         for (Item item : this.game.getPlayer().getInventory()) {
-            inventoryModel.addElement(item.getName());
+            inventoryModel.addElement(item.toString());
         }
 
         this.inventoryList.setModel(inventoryModel);
