@@ -8,11 +8,7 @@ import it.unicam.cs.mpgc.rpg119163.model.items.HealingPotion;
 import it.unicam.cs.mpgc.rpg119163.model.items.Weapon;
 import it.unicam.cs.mpgc.rpg119163.persistence.GameRepository;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -25,10 +21,12 @@ public class StartWindow extends JFrame {
     private final JButton loadGameButton;
     private final JButton exitButton;
     private final JLabel titleLabel;
+    private final JTextField playerNameField;
 
     public StartWindow() {
         this.gameRepository = new GameRepository();
         this.titleLabel = new JLabel("SimpleRPG!");
+        this.playerNameField = new JTextField(15);
         this.newGameButton = new JButton("New Game");
         this.loadGameButton = new JButton("Load Game");
         this.exitButton = new JButton("Exit");
@@ -72,7 +70,17 @@ public class StartWindow extends JFrame {
         final JPanel centerPanel = new JPanel(
                 new FlowLayout(FlowLayout.CENTER)
         );
+
+        final JPanel namePanel = new JPanel(
+                new FlowLayout(FlowLayout.CENTER)
+        );
+        namePanel.add(new JLabel("Player name: "));
+        namePanel.add(this.playerNameField);
+
+        centerPanel.add(namePanel);
         centerPanel.add(buttonPanel);
+
+
 
         add(this.titleLabel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
@@ -93,7 +101,13 @@ public class StartWindow extends JFrame {
     }
 
     private void startNewGame() {
-        final Player player = new Player("Hero", 100, 20, 5);
+        String playerName = this.playerNameField.getText().trim();
+
+        if (playerName.isEmpty()) {
+            playerName = "Hero";
+        }
+
+        final Player player = new Player(playerName, 100, 20, 5);
         player.addItem(new HealingPotion("Potion", "Heals 50 HP", 10, 50));
         player.addItem(new Weapon("Iron Sword", "A basic iron sword", 50, 10));
 
