@@ -134,4 +134,10 @@ public class Player extends GameCharacter {
         return this.equippedWeapon;
     }
 
+    public long countUsableItems() {
+        return this.inventory.stream()
+                .filter(item -> item instanceof Usable)
+                .count();
+    }
+
 }

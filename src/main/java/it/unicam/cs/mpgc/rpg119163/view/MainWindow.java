@@ -234,7 +234,10 @@ public class MainWindow extends JFrame {
         this.playerSecondaryStatsLabel.setText(
                 "ATK: " + this.game.getPlayer().getAttack()
                         + " | DEF: " + this.game.getPlayer().getDefense()
+                        + " | Usables: "
+                        + this.game.getPlayer().countUsableItems()
         );
+
         final Weapon equippedWeapon = this.game.getPlayer().getEquippedWeapon();
         if (equippedWeapon == null) {
             this.equippedWeaponLabel.setText("Equipped: None");
