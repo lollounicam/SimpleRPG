@@ -99,8 +99,17 @@ public class StartWindow extends JFrame {
         );
     }
 
+    private String getPlayerName() {
+        final String playerName = this.playerNameField.getText().trim();
+
+        if (playerName.isEmpty()){
+            return "Hero";
+        }
+        return playerName;
+    }
+
     private void startNewGame() {
-        final String playerName = this.playerNameField.getText();
+       final String playerName = this.getPlayerName();
         final Game game = this.gameFactory.createNewGame(playerName);
 
         new MainWindow(game);
