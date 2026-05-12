@@ -11,6 +11,7 @@ public class Player extends GameCharacter {
 
     private int experience;
     private int gold;
+    private Weapon equippedWeapon;
     private transient final List<Item> inventory;
 
     public Player(final String name,
@@ -20,6 +21,7 @@ public class Player extends GameCharacter {
         super(name, maxHealth, attack, defense);
         this.experience = 0;
         this.gold = 0;
+        this.equippedWeapon = null;
         this.inventory = new ArrayList<>();
     }
 
@@ -120,6 +122,12 @@ public class Player extends GameCharacter {
         }
 
         this.increaseAttack(weapon.getAttackBonus());
+        this.equippedWeapon = weapon;
         this.inventory.remove(weapon);
     }
+
+    public Weapon getEquippedWeapon() {
+        return this.equippedWeapon;
+    }
+
 }

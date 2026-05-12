@@ -4,6 +4,7 @@ import it.unicam.cs.mpgc.rpg119163.model.Game;
 import it.unicam.cs.mpgc.rpg119163.model.items.Equippable;
 import it.unicam.cs.mpgc.rpg119163.model.items.Item;
 import it.unicam.cs.mpgc.rpg119163.model.items.Usable;
+import it.unicam.cs.mpgc.rpg119163.model.items.Weapon;
 import it.unicam.cs.mpgc.rpg119163.persistence.GameRepository;
 
 import javax.swing.BorderFactory;
@@ -31,6 +32,7 @@ public class MainWindow extends JFrame {
     private final JLabel enemyHealthLabel;
     private final JLabel playerStatsLabel;
     private final JLabel playerSecondaryStatsLabel;
+    private final JLabel equippedWeaponLabel;
 
     private final JProgressBar playerHealthBar;
     private final JProgressBar enemyHealthBar;
@@ -52,6 +54,7 @@ public class MainWindow extends JFrame {
         this.enemyHealthLabel = new JLabel();
         this.playerStatsLabel = new JLabel();
         this.playerSecondaryStatsLabel = new JLabel();
+        this.equippedWeaponLabel = new JLabel();
 
         this.playerHealthBar = new JProgressBar();
         this.enemyHealthBar = new JProgressBar();
@@ -91,6 +94,8 @@ public class MainWindow extends JFrame {
         this.enemyHealthLabel.setFont(normalFont);
         this.playerStatsLabel.setFont(normalFont);
         this.playerSecondaryStatsLabel.setFont(normalFont);
+        this.equippedWeaponLabel.setFont(normalFont);
+
         this.inventoryList.setFont(normalFont);
 
         this.attackButton.setFont(buttonFont);
@@ -109,7 +114,7 @@ public class MainWindow extends JFrame {
         final JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.add(this.messageLabel);
 
-        final JPanel playerPanel = new JPanel(new GridLayout(4, 1, 5, 5));
+        final JPanel playerPanel = new JPanel(new GridLayout(5, 1, 5, 5));
         playerPanel.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Player"),
@@ -120,6 +125,7 @@ public class MainWindow extends JFrame {
         playerPanel.add(this.playerHealthBar);
         playerPanel.add(this.playerStatsLabel);
         playerPanel.add(this.playerSecondaryStatsLabel);
+        playerPanel.add(this.equippedWeaponLabel);
 
         final JPanel enemyPanel = new JPanel(new GridLayout(2, 1, 5, 5));
         enemyPanel.setBorder(
@@ -229,6 +235,14 @@ public class MainWindow extends JFrame {
                 "ATK: " + this.game.getPlayer().getAttack()
                         + " | DEF: " + this.game.getPlayer().getDefense()
         );
+        final Weapon equippedWeapon = this.game.getPlayer().getEquippedWeapon();
+        if (equippedWeapon == null) {
+            this.equippedWeaponLabel.setText("Equipped: None");
+        } else {
+            this.equippedWeaponLabel.setText(
+                    "Equipped: " + equippedWeapon.getName()
+            );
+        }
     }
 
     private void updateHealthBars() {
