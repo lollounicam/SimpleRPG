@@ -142,6 +142,16 @@ public class GameCharacter {
     protected void increaseAttack(final double amount) {
         this.attack += amount;
     }
+    protected void decreaseAttack(final double amount) {
+        if (amount <= 0){
+            return;
+        }
+        this.attack -= amount;
+
+        if (this.attack < 0){
+            this.attack = 0;
+        }
+    }
     protected void increaseDefense(final double amount) {
         this.defense += amount;
     }

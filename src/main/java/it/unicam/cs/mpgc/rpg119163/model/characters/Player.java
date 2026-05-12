@@ -120,6 +120,10 @@ public class Player extends GameCharacter {
         if (!this.inventory.contains(weapon)) {
             return;
         }
+        if (this.equippedWeapon != null) {
+            this.decreaseAttack(this.equippedWeapon.getAttackBonus());
+            this.inventory.add(this.equippedWeapon);
+        }
 
         this.increaseAttack(weapon.getAttackBonus());
         this.equippedWeapon = weapon;
