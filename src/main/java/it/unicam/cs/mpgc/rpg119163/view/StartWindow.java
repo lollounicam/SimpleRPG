@@ -2,10 +2,7 @@
 package it.unicam.cs.mpgc.rpg119163.view;
 
 import it.unicam.cs.mpgc.rpg119163.model.Game;
-import it.unicam.cs.mpgc.rpg119163.model.characters.Enemy;
-import it.unicam.cs.mpgc.rpg119163.model.characters.Player;
-import it.unicam.cs.mpgc.rpg119163.model.items.HealingPotion;
-import it.unicam.cs.mpgc.rpg119163.model.items.Weapon;
+import it.unicam.cs.mpgc.rpg119163.model.GameFactory;
 import it.unicam.cs.mpgc.rpg119163.persistence.GameRepository;
 
 import javax.swing.*;
@@ -22,6 +19,7 @@ public class StartWindow extends JFrame {
     private final JButton exitButton;
     private final JLabel titleLabel;
     private final JTextField playerNameField;
+    private final GameFactory gameFactory;
 
     public StartWindow() {
         this.gameRepository = new GameRepository();
@@ -30,6 +28,7 @@ public class StartWindow extends JFrame {
         this.newGameButton = new JButton("New Game");
         this.loadGameButton = new JButton("Load Game");
         this.exitButton = new JButton("Exit");
+        this.gameFactory = new GameFactory();
 
         this.configureWindow();
         this.configureComponents();
@@ -101,18 +100,8 @@ public class StartWindow extends JFrame {
     }
 
     private void startNewGame() {
-        String playerName = this.playerNameField.getText().trim();
-
-        if (playerName.isEmpty()) {
-            playerName = "Hero";
-        }
-
-        final Player player = new Player(playerName, 100, 20, 5);
-        player.addItem(new HealingPotion("Potion", "Heals 50 HP", 10, 50));
-        player.addItem(new Weapon("Iron Sword", "A basic iron sword", 50, 10));
-
-        final Enemy enemy = new Enemy("Goblin", 50, 10, 3, 25, 8);
-        final Game game = new Game(player, enemy);
+        final String playerName = this.playerNameField.getText();
+        final Game game = this.gameFactory.createNewGame(playerName);
 
         new MainWindow(game);
         this.dispose();
