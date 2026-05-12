@@ -164,9 +164,7 @@ public class MainWindow extends JFrame {
     private void configureActions() {
         this.attackButton.addActionListener(
                 e -> {
-                    this.game.nextTurn();
-                    this.updateView();
-                    this.updateCombatMessage();
+                    this.handleAttack();
                 }
         );
 
@@ -185,9 +183,8 @@ public class MainWindow extends JFrame {
                 e -> {
                     try {
                         this.game = this.gameRepository.loadGame("savegame.json");
-                        this.updateView();
+                        this.refreshGameState();
                         this.messageLabel.setText("Game loaded successfully.");
-                        this.updateAttackButtonState();
                     } catch (IllegalStateException exception) {
                         this.messageLabel.setText("Unable to load the game.");
                     }
@@ -308,7 +305,7 @@ public class MainWindow extends JFrame {
         }
 
         this.game.getPlayer().useItem(selectedItem);
-        this.updateView();
+        this.refreshGameState();
         this.messageLabel.setText(selectedItem.getName() + " used.");
     }
 
@@ -325,7 +322,7 @@ public class MainWindow extends JFrame {
         }
 
         equippableItem.equip(this.game.getPlayer());
-        this.updateView();
+        this.refreshGameState();
         this.messageLabel.setText(selectedItem.getName() + " equipped.");
     }
 
@@ -340,5 +337,16 @@ public class MainWindow extends JFrame {
         return this.game.getPlayer()
                 .getInventory()
                 .get(selectedIndex);
+    }
+
+    private void handleAttack() {
+        this.game.nextTurn();
+        this.refreshGameState();
+    }
+
+    private void refreshGameState() {
+        this.updateView();
+        this.updateCombatMessage();
+        this.updateAttackButtonState();
     }
 }
