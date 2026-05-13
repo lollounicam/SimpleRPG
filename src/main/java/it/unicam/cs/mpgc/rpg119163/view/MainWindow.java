@@ -38,12 +38,14 @@ public class MainWindow extends JFrame {
     private final JProgressBar enemyHealthBar;
 
     private final JList<String> inventoryList;
+    private final JList<String> shopList;
 
     private final JButton attackButton;
     private final JButton saveButton;
     private final JButton loadButton;
     private final JButton useItemButton;
     private final JButton equipItemButton;
+    private final JButton buyItemButton;
 
     public MainWindow(final Game game) {
         this.game = game;
@@ -60,12 +62,14 @@ public class MainWindow extends JFrame {
         this.enemyHealthBar = new JProgressBar();
 
         this.inventoryList = new JList<>();
+        this.shopList = new JList<>();
 
         this.attackButton = new JButton("Attack");
         this.saveButton = new JButton("Save");
         this.loadButton = new JButton("Load");
         this.useItemButton = new JButton("Use Item");
         this.equipItemButton = new JButton("Equip Item");
+        this.buyItemButton = new JButton("Buy Item");
 
         this.configureWindow();
         this.configureComponents();
@@ -108,6 +112,9 @@ public class MainWindow extends JFrame {
         this.enemyHealthBar.setMinimum(0);
         this.playerHealthBar.setStringPainted(true);
         this.enemyHealthBar.setStringPainted(true);
+
+        this.shopList.setFont(normalFont);
+        this.buyItemButton.setFont(buttonFont);
     }
 
     private void buildLayout() {
@@ -152,22 +159,47 @@ public class MainWindow extends JFrame {
                         BorderFactory.createEmptyBorder(10, 10, 10, 10)
                 )
         );
+
+        final JScrollPane shopScrollPane = new JScrollPane(this.shopList);
+        shopScrollPane.setPreferredSize(
+                new Dimension(170,0)
+        );
+
+        final JPanel shopPanel = new JPanel(new BorderLayout());
+
+        shopPanel.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder("Shop"),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10)
+                )
+        );
+        shopPanel.add(shopScrollPane, BorderLayout.CENTER);
         inventoryPanel.add(inventoryScrollPane, BorderLayout.CENTER);
 
         final JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 8));
+        final JPanel sidePanel = new JPanel(new GridLayout(2,1,5,5));
+        sidePanel.add(inventoryPanel);
+        sidePanel.add(shopPanel);
+
         bottomPanel.add(this.attackButton);
         bottomPanel.add(this.useItemButton);
         bottomPanel.add(this.equipItemButton);
         bottomPanel.add(this.saveButton);
         bottomPanel.add(this.loadButton);
+        bottomPanel.add(this.buyItemButton);
 
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
-        add(inventoryPanel, BorderLayout.EAST);
+
+        add(sidePanel, BorderLayout.EAST);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void configureActions() {
+        this.buyItemButton.addActionListener(
+                e -> this.buySelectedItem()
+        );
+
         this.attackButton.addActionListener(
                 e -> {
                     this.handleAttack();
@@ -210,6 +242,7 @@ public class MainWindow extends JFrame {
         this.updateCharacterLabels();
         this.updateHealthBars();
         this.updateInventoryList();
+        this.updateShopList();
     }
 
     private void updateCharacterLabels() {
@@ -287,6 +320,15 @@ public class MainWindow extends JFrame {
         this.inventoryList.setModel(inventoryModel);
     }
 
+    private void updateShopList() {
+        final DefaultListModel<String> shopModel = new DefaultListModel<>();
+
+        for (Item item : this.game.getShop().getItems()) {
+            shopModel.addElement(item.toString());
+        }
+        this.shopList.setModel(shopModel);
+    }
+
     private void updateCombatMessage() {
         if (!this.game.getCurrentEnemy().isAlive()) {
             this.messageLabel.setText(
@@ -344,6 +386,30 @@ public class MainWindow extends JFrame {
         equippableItem.equip(this.game.getPlayer());
         this.refreshGameState();
         this.messageLabel.setText(selectedItem.getName() + " equipped.");
+    }
+    private void buySelectedItem() {
+        final int selectedIndex = this.shopList.getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            this.messageLabel.setText("No item selected.");
+            return;
+        }
+        final Item selectedItem =
+                this.game.getShop()
+                .getItems()
+                .get(selectedIndex);
+        final boolean bought =
+                this.game.getShop().buyItem(
+                        this.game.getPlayer(),
+                        selectedItem
+                );
+        if (!bought) {
+            this.messageLabel.setText("Not enough gold.");
+            return;
+        }
+
+        this.refreshGameState();
+        this.messageLabel.setText(selectedItem.getName() + " bought.");
     }
 
     private Item getSelectedInventoryItem() {
