@@ -1,0 +1,23 @@
+[
+  {
+    "type": "HEALING_POTION",
+    "name": "Big Potion",
+    "description": "Heals 100 HP",
+    "price": 25,
+    "healingAmount": 100
+  },
+  {
+    "type": "WEAPON",
+    "name": "Steel Sword",
+    "description": "A stronger sword",
+    "price": 120,
+    "attackBonus": 20
+  },
+  {
+    "type": "WEAPON",
+    "name": "Battle Axe",
+    "description": "A heavy axe",
+    "price": 180,
+    "attackBonus": 35
+  }
+]

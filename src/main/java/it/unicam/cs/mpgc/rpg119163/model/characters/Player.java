@@ -139,5 +139,19 @@ public class Player extends GameCharacter {
                 .filter(item -> item instanceof Usable)
                 .count();
     }
+    public long countWeapons() {
+        return this.getInventory().stream()
+                .filter(item -> item instanceof Weapon)
+                .count();
+    }
 
+    public void spendGold(final int price) {
+        if (price <= 0) {
+            return;
+        }
+        if (this.gold < price) {
+            return;
+        }
+        this.gold -= price;
+    }
 }

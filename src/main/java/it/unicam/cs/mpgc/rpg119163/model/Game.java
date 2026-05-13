@@ -1,33 +1,26 @@
 package it.unicam.cs.mpgc.rpg119163.model;
 
-/*
- * TODO:
- *  [x] Create GameCharacter base class
- *  [x] Implement Player inheritance
- *  [x] Implement Enemy inheritance
- *  [x] Implement damage system
- *  [x] Implement basic combat mechanics
- *  [x] Implement enemy attack
- *  [x] Implement level up system
- *  [x] Implement healing system
- *  [x] Implement combat turns
- *  [x] Implement inventory
- *  [x] Implement game loop
- *  [x] Implement save/load system
- *  [x] Implement Swing GUI
- */
+
 
 import it.unicam.cs.mpgc.rpg119163.model.characters.Enemy;
 import it.unicam.cs.mpgc.rpg119163.model.characters.Player;
+import it.unicam.cs.mpgc.rpg119163.persistence.ShopRepository;
 
 public class Game {
 
     final private Player player;
-    final private Enemy currentEnemy;
+    private Enemy currentEnemy;
+    private final GameFactory gameFactory;
+    private final Shop shop;
 
     public Game(final Player player, final Enemy enemy) {
         this.player = player;
         this.currentEnemy = enemy;
+        this.gameFactory = new GameFactory();
+        this.shop = new Shop();
+        final ShopRepository shopRepository = new ShopRepository();
+
+        shopRepository.loadShopItems().forEach(this.shop::addItem);
     }
 
     public Player getPlayer() {
@@ -38,7 +31,7 @@ public class Game {
         return currentEnemy;
     }
 
-    public double playerAttack() {
+    private double playerAttack() {
         return this.player.attackTarget(this.currentEnemy);
     }
 
@@ -46,22 +39,38 @@ public class Game {
         return this.currentEnemy.attackTarget(this.player);
     }
 
-    public void nextTurn() {
-        this.playerAttack();
+    public String nextTurn() {
+        final double playerDamage = this.playerAttack();
         //System.out.println("Player dealt " + playerDamage + " damage.");
         if (!this.currentEnemy.isAlive()) {
             this.player.gainExperience(this.currentEnemy.getRewardExperience());
             this.player.gainGold(this.currentEnemy.getRewardGold());
+            this.currentEnemy = this.gameFactory.createRandomEnemy();
             //System.out.println("You won the game!");
-            return;
+            return "Enemy defeated!";
         }
 
-        this.enemyAttack();
+        final double enemyDamage = this.enemyAttack();
         //System.out.println("Enemy dealt " + enemyDamage + " damage.");
 
         if (!this.player.isAlive()) {
             //System.out.println("You lost the game!");
-            return;
+            return "Player defeated!";
         }
+
+        return this.player.getName()
+                + " dealt "
+                + (int) playerDamage
+                + " damage to "
+                + this.currentEnemy.getName()
+                + ". "
+                + this.currentEnemy.getName()
+                + " dealt "
+                + (int) enemyDamage
+                + " damage back.";
+    }
+
+    public Shop getShop() {
+        return this.shop;
     }
 }

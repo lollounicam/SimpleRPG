@@ -236,6 +236,9 @@ public class MainWindow extends JFrame {
                         + " | DEF: " + this.game.getPlayer().getDefense()
                         + " | Usables: "
                         + this.game.getPlayer().countUsableItems()
+                        + " | Weapons: "
+                        + this.game.getPlayer().countWeapons()
+
         );
 
         final Weapon equippedWeapon = this.game.getPlayer().getEquippedWeapon();
@@ -357,8 +360,9 @@ public class MainWindow extends JFrame {
     }
 
     private void handleAttack() {
-        this.game.nextTurn();
+        final String combatMessage = this.game.nextTurn();
         this.refreshGameState();
+        this.messageLabel.setText(combatMessage);
     }
 
     private void refreshGameState() {

@@ -43,5 +43,9 @@ public class GameFactory {
         );
     }
 
+    public Enemy createRandomEnemy() {
+        return this.createEnemy();
+    }
+
 
 }
